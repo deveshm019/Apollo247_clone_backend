@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import Doctor from "../models/Doctor.js";
+
 const router = express.Router();
-const Doctor = require("../models/Doctor");
 
 router.get("/", async (req, res) => {
   const {
@@ -10,12 +11,11 @@ router.get("/", async (req, res) => {
     consultationFee,
     language,
     apolloDoctor,
-    sort, // ✅ New
+    sort,
   } = req.query;
 
   const andConditions = [];
 
-  // Experience filter
   if (experience) {
     const experienceConditions = experience.split(",").map((range) => {
       if (range === "0-5") return { experience: { $gte: 0, $lte: 5 } };
@@ -27,7 +27,6 @@ router.get("/", async (req, res) => {
     andConditions.push({ $or: experienceConditions });
   }
 
-  // Consultation fee filter
   if (consultationFee) {
     const feeConditions = consultationFee.split(",").map((range) => {
       if (range === "100-500")
@@ -40,24 +39,21 @@ router.get("/", async (req, res) => {
     andConditions.push({ $or: feeConditions });
   }
 
-  // Language filter
   if (language) {
     const languagesArray = language.split(",").map((lang) => lang.trim());
     andConditions.push({ languages: { $in: languagesArray } });
   }
 
-  // Apollo Doctor filter
   if (apolloDoctor === "true" || apolloDoctor === "false") {
     andConditions.push({ apolloDoctor: apolloDoctor === "true" });
   }
 
   const query = andConditions.length > 0 ? { $and: andConditions } : {};
 
-  // ✅ Sorting logic
   let sortOption = {};
   switch (sort) {
     case "availability":
-      sortOption = { available: 1 }; // show available doctors first
+      sortOption = { available: 1 };
       break;
     case "price-low-high":
       sortOption = { consultationFee: 1 };
@@ -69,10 +65,10 @@ router.get("/", async (req, res) => {
       sortOption = { experience: -1 };
       break;
     case "most-liked":
-      sortOption = { rating: -1 }; // assuming 'rating' represents popularity
+      sortOption = { rating: -1 };
       break;
     default:
-      sortOption = {}; // relevance / default order
+      sortOption = {};
   }
 
   try {
@@ -93,4 +89,5 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-module.exports = router;
+
+export default router;

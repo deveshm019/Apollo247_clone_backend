@@ -1,15 +1,14 @@
-const express = require("express");
-const router = express.Router();
-const multer = require("multer");
-const Doctor = require("../models/doctor");
-const cloudinary = require("cloudinary").v2;
-const streamifier = require("streamifier"); // Required for uploading buffer to Cloudinary
+import express from "express";
+import multer from "multer";
+import Doctor from "../models/doctor.js";
+import { v2 as cloudinary } from "cloudinary";
+import streamifier from "streamifier";
 
-// Multer storage config (in-memory)
+const router = express.Router();
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// POST /api/add-doctor
 router.post("/", upload.single("profilePic"), async (req, res) => {
   try {
     const {
@@ -40,17 +39,13 @@ router.post("/", upload.single("profilePic"), async (req, res) => {
       return res.status(400).json({ message: "Please Enter Full Data!" });
     }
 
-    // Upload image buffer to Cloudinary
     const streamUpload = (buffer) => {
       return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: "doctor_profiles" },
           (error, result) => {
-            if (result) {
-              resolve(result);
-            } else {
-              reject(error);
-            }
+            if (result) resolve(result);
+            else reject(error);
           }
         );
         streamifier.createReadStream(buffer).pipe(stream);
@@ -80,4 +75,4 @@ router.post("/", upload.single("profilePic"), async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,18 +1,18 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-require("dotenv").config();
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import cloudinary from "cloudinary";
+import addDoctorRoute from "./routes/add-doctor.js";
+import listDoctorRoute from "./routes/list-doctor-with-filter.js";
 
-const cloudinary = require("cloudinary").v2;
+dotenv.config();
 
-cloudinary.config({
+cloudinary.v2.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
-
-const addDoctorRoute = require("./routes/add-doctor");
-const listDoctorRoute = require("./routes/list-doctor-with-filter");
 
 const app = express();
 app.use(cors());
@@ -28,13 +28,13 @@ const startServer = async () => {
       useUnifiedTopology: true,
     });
 
-    console.log("✅ MongoDB connected");
+    console.log("MongoDB connected");
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`Server running on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error("❌ MongoDB connection error:", error.message);
+    console.error("MongoDB connection error:", error.message);
     process.exit(1);
   }
 };
