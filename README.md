@@ -9,20 +9,9 @@ Filter Options: Filter doctors based on experience, consultation fee, and langua
 
 Sort Doctors: Sort doctors by relevance, availability, consultation fee (low to high or high to low), experience, etc.
 
-Responsive Design: Fully responsive interface for both mobile and desktop views.
-
 Real-time Availability: Displays the minutes until the doctor is available for consultation.
 
-Tech Stack
-Frontend:
-
-Next.js
-
-React
-
-Tailwind CSS
-
-Backend:
+Tech Stack (backend)
 
 Node.js
 
@@ -30,13 +19,6 @@ Express
 
 MongoDB
 
-Additional Tools:
-
-Apollo Client (for managing state with GraphQL)
-
-MongoDB (for storing doctor data)
-
-JWT Authentication (for user sessions)
 
 Setup Instructions
 Prerequisites
@@ -49,33 +31,18 @@ MongoDB: If you’re using a local MongoDB instance, install MongoDB. Alternativ
 Backend Setup
 Clone the repository:
 
-bash
-Copy
-Edit
 git clone https://github.com/your-username/apollo-clone.git
-Navigate to the backend directory:
 
-bash
-Copy
-Edit
-cd apollo-clone/backend
 Install dependencies:
-
-bash
-Copy
-Edit
 npm install
+
 Create a .env file and add the following environment variables:
 
-env
-Copy
-Edit
-MONGO_URI=mongodb://localhost:27017/apollo-clone
-JWT_SECRET=your_jwt_secret
-NEXT_PUBLIC_API_BASE=http://localhost:5000
-Start the backend server:
+MONGO_URI = mongoDB connection string
+PORT = port number
+CLOUD_NAME = cloudinary name
+CLOUD_API_KEY = cloudinary API key
+CLOUD_API_SECRET = cloudinary API secret key
 
-bash
-Copy
-Edit
+Start the backend server:
 npm start
